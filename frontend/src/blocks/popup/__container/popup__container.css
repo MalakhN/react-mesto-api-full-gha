@@ -1,0 +1,16 @@
+.popup__container {
+  position: fixed;
+  width: 430px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #FFFFFF;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .popup__container {
+    width: 282px;
+  }
+}
+

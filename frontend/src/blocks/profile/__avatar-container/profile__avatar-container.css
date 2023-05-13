@@ -1,0 +1,10 @@
+.profile__avatar-container {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .profile__avatar-container {
+    flex-direction: column;
+    margin: 0 auto;
+  }
+}

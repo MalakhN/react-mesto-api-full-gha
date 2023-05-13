@@ -1,0 +1,10 @@
+.element__text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 246px;
+  padding: 25px 20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}

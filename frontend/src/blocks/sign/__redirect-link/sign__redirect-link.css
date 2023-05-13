@@ -1,0 +1,9 @@
+.sign__redirect-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.sign__redirect-link:hover {
+  opacity: 60%;
+  cursor: pointer;
+}

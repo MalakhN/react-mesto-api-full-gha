@@ -1,0 +1,17 @@
+.element__icon {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  overflow: hidden;
+  padding: 0;
+  min-width: 22px;
+  height: 19px;
+  background-image: url(../../../images/Like.svg);
+  cursor: pointer;
+}
+
+.element__icon:hover {
+  opacity: 60%;
+}

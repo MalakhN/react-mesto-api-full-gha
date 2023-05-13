@@ -1,0 +1,23 @@
+.form__item {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-color: rgb(0, 0, 0, 0.2);
+  border-width: 1px;
+  margin: 19px 0 0;
+  padding: 10px 0 8px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  width: 100%;
+}
+
+.form__item:nth-child(1) {
+  margin: 0;
+}
+
+.form__item:focus {
+  outline-color: rgb(128, 171, 244);
+  outline-style: solid;
+  outline-width: 3px;
+ }

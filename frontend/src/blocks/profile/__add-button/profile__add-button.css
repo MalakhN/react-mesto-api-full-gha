@@ -1,0 +1,29 @@
+.profile__add-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 2px;
+  color: #ffffff;
+  padding: 0;
+  min-width: 150px;
+  min-height: 50px;
+  margin: 0;
+  background: transparent;
+  background-image: url(../../../images/Vector-add-button.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.profile__add-button:hover {
+  opacity: 60%;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .profile__add-button {
+    min-width: 282px;
+  }
+}
