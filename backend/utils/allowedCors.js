@@ -1,6 +1,8 @@
 const allowedCors = [
-  'http://51.250.74.50:3000',
-  'https://51.250.74.50:3000',
+  'https://mesto-frontend.nomoredomains.monster',
+  'http://mesto-frontend.nomoredomains.monster',
+  'https://mesto-backend.nomoredomains.monster',
+  'http://mesto-backend.nomoredomains.monster',
   'localhost:3000',
   'http://localhost:3000',
   'http://localhost:3001',

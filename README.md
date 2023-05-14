@@ -4,12 +4,12 @@
 
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-Адрес репозитория: https://github.com/MalakhN/react-mesto-api-full-gha.git
+Адрес репозитория: <https://github.com/MalakhN/react-mesto-api-full-gha.git>
 
 ## Ссылки на проект
 
 IP-адрес 51.250.74.50
 
-Frontend https://...
+Frontend <https://mesto-frontend.nomoredomains.monster>
 
-Backend https://...
+Backend <https://mesto-backend.nomoredomains.monster>
