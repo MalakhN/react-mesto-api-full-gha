@@ -8,7 +8,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 51.250.74.50
+IP-адрес <51.250.74.50>
 
 Frontend <https://mesto-frontend.nomoredomains.monster>
 
