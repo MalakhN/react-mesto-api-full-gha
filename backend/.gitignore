@@ -13,3 +13,7 @@ node_modules
 .DS_Store
 .idea
 .vscode
+
+# env config files
+*.env
+.env
