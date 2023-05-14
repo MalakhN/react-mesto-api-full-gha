@@ -1,4 +1,4 @@
-class Api {
+export default class Api {
   constructor({ url, headers }) {
     this._url = url;
     this._headers = headers;
@@ -88,12 +88,3 @@ class Api {
     }
   }
 }
-
-/* Экземпляр класса Api с нужными параметрами (включая токен) */
-export const api = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-58",
-  headers: {
-    authorization: "05649945-c6eb-4227-a166-ce14a7095099",
-    "Content-Type": "application/json",
-  },
-});
