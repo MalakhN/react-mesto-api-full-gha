@@ -110,9 +110,15 @@ function App() {
       });
   };
 
-  /* Обработчик состояния авторизации */
+  /* Обработчики состояния авторизации */
   const handleLogin = () => {
     setLoggedIn(true);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    navigate("/sign-in", { replace: true });
+    setLoggedIn(false);
   };
 
   /* Обработчики пропса isOpen, открывающие соответствующие попапы */
@@ -246,6 +252,7 @@ function App() {
               element={
                 <ProtectedRoute
                   loggedIn={loggedIn}
+                  onSignOut={handleSignOut}
                   element={Main}
                   email={email}
                   onEditProfile={handleEditProfileClick}
