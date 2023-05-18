@@ -79,7 +79,6 @@ function App() {
       .authorization(email, password)
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token)
           setEmail("");
           handleLogin();
           navigate("/main", { replace: true });
