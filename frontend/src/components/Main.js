@@ -11,7 +11,7 @@ function Main(props) {
   return (
     <>
       {/* Хедер */}
-      <Header email={props.email} text="Выйти" onClick={props.signOut} />
+      <Header email={props.email} text="Выйти" onClick={props.onSignOut} />
       <main className="content">
         {/* Информация профиля */}
         <section className="profile">
