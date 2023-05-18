@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Api from "../utils/api";
+import { api } from "../utils/api";
 import { auth } from "../utils/auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
@@ -38,14 +38,6 @@ function App() {
   const [isSignSuccess, setIsSignSuccess] = React.useState(false);
   const navigate = useNavigate();
 
-  const api = new Api({
-    url: 'https://mesto-backend.nomoredomains.monster',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
-
   /* Проверяем JSON Web Token */
   React.useEffect(() => {
     const jwt = localStorage.getItem("token");
@@ -82,7 +74,6 @@ function App() {
       .authorization(email, password)
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token)
           setEmail("");
           handleLogin();
           navigate("/main", { replace: true });
