@@ -53,7 +53,7 @@ function App() {
       auth
         .checkToken()
         .then((res) => {
-          setEmail(res.data.email);
+          setEmail(res.email);
           setLoggedIn(true);
           navigate("/main", { replace: true });
         })
