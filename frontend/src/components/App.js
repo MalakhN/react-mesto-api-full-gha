@@ -27,10 +27,7 @@ function App() {
     link: "",
   });
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState({
-    name: "",
-    about: "",
-  });
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -82,6 +79,7 @@ function App() {
       .authorization(email, password)
       .then((data) => {
         if (data.token) {
+          localStorage.setItem('token', data.token)
           setEmail("");
           handleLogin();
           navigate("/main", { replace: true });

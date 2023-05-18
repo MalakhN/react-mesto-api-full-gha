@@ -22,7 +22,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -40,7 +40,7 @@ const getUserInfo = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -59,7 +59,7 @@ const createUser = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({
-      name, about, avatar, email, password: hash
+      email, password: hash, name, about, avatar
     }))
     .then((newUser) => {
       res.status(201).send({
@@ -124,7 +124,7 @@ const updateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь с данным id не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -151,7 +151,7 @@ const updateAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь с данным id не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
