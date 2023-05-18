@@ -1,29 +1,76 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const { JWT_SECRET, NODE_ENV } = require('../config');
+const Card = require('../models/card');
 const BadRequestError = require('../errors/badrequest-err');
 const NotFoundError = require('../errors/notfound-err');
-const ConflictError = require('../errors/conflict-err');
-const UnauthorizedError = require('../errors/unauthorized-err');
+const ForbiddenError = require('../errors/forbidden-err');
 
-const getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => res.status(200).send({ data: users }))
+const createCard = (req, res, next) => {
+  const { _id } = req.user;
+  const { name, link } = req.body;
+  Card.create({ name, link, owner: _id })
+    .then((newCard) => {
+      Card.findOne(newCard)
+        .populate(['owner'])
+        .then((card) => res.status(201).send(card));
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(
+          new BadRequestError(
+            'Переданы некорректные данные при создании карточки.',
+          ),
+        );
+        return;
+      }
+      next(err);
+    });
+};
+
+const getAllCards = (req, res, next) => {
+  Card.find({})
+    .populate(['owner', 'likes'])
+    .then((cards) => {
+      res.send(cards);
+    })
     .catch((err) => {
       next(err);
     });
 };
 
-const getUserById = (req, res, next) => {
-  const { userId } = req.params;
-
-  User.findById(userId)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден.');
+const deleteCard = (req, res, next) => {
+  const { cardId } = req.params;
+  Card.findById(cardId)
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Карточка не найдена');
+      } else if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('Пользователь не может удалить карточку, которую он не создавал');
       } else {
-        res.status(200).send(user);
+        return Card.deleteOne({ _id: cardId }).then(() => res.send(card));
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Некорректный id карточки'));
+        return;
+      }
+      next(err);
+    });
+};
+
+const likeCard = (req, res, next) => {
+  const { cardId } = req.params;
+  const owner = req.user._id;
+  Card.findByIdAndUpdate(
+    cardId,
+    { $addToSet: { likes: owner } }, // добавить _id в массив, если его там нет
+    { new: true },
+  )
+    .populate(['owner', 'likes'])
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Передан несуществующий id карточки.');
+      } else {
+        res.send(card);
       }
     })
     .catch((err) => {
@@ -35,139 +82,26 @@ const getUserById = (req, res, next) => {
     });
 };
 
-const getInfoMe = (req, res, next) => {
-  User.findById({ _id: req.user._id })
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден.');
-      } else {
-        res.status(200).send(user);
-      }
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-const createUser = (req, res, next) => {
-  const { name, about, avatar, email } = req.body;
-
-  bcrypt
-    .hash(req.body.password, 5)
-    .then((hash) => User.create({ email, password: hash, name, about, avatar }))
-    .then((newUser) => {
-      res.status(200).send({
-        email: newUser.email,
-        name: newUser.name,
-        about: newUser.about,
-        avatar: newUser.avatar,
-      });
-    })
-    .catch((err) => {
-      if (err.code === 11000) {
-        next(
-          new ConflictError('Пользователь с таким email уже зарегистрирован'),
-        );
-      } else if (err.name === 'ValidationError') {
-        next(
-          new BadRequestError(
-            'Переданы некорректные данные при создании пользователя.',
-          ),
-        );
-      } else {
-        next(err);
-      }
-    });
-};
-
-const login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  User.findOne({ email })
-    .select('+password')
-    .then((user) => {
-      if (!user) {
-        throw new UnauthorizedError('Неправильная почта или пароль.');
-      }
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          // хеши не совпали — отклоняем промис
-          throw new UnauthorizedError('Неправильная почта или пароль.');
-        }
-
-        const token = jwt.sign(
-          { _id: user._id },
-          NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
-          {
-            expiresIn: '7d',
-          },
-        );
-        res.status(200).send({ token });
-      });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-const updateProfile = (req, res, next) => {
+const dislikeCard = (req, res, next) => {
+  const { cardId } = req.params;
   const owner = req.user._id;
-  const { name, about } = req.body;
 
-  User.findByIdAndUpdate(
-    owner,
-    { name, about },
-    {
-      new: true,
-      runValidators: true,
-    },
+  Card.findByIdAndUpdate(
+    cardId,
+    { $pull: { likes: owner } }, // убрать _id из массива
+    { new: true },
   )
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь c указанным id не найден.');
+    .populate(['owner', 'likes'])
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Передан несуществующий id карточки.');
       } else {
-        res.send(user);
+        res.send(card);
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(
-          new BadRequestError(
-            'Переданы некорректные данные при обновлении профиля.',
-          ),
-        );
-        return;
-      }
-      next(err);
-    });
-};
-
-const updateAvatar = (req, res, next) => {
-  const owner = req.user._id;
-  const { avatar } = req.body;
-
-  User.findByIdAndUpdate(
-    owner,
-    { avatar },
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь c указанным id не найден.');
-      } else {
-        res.send(user);
-      }
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(
-          new BadRequestError(
-            'Переданы некорректные данные при обновлении аватара.',
-          ),
-        );
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Введен некорректный id.'));
         return;
       }
       next(err);
@@ -175,11 +109,9 @@ const updateAvatar = (req, res, next) => {
 };
 
 module.exports = {
-  createUser,
-  getUsers,
-  getInfoMe,
-  getUserById,
-  updateProfile,
-  updateAvatar,
-  login,
+  createCard,
+  getAllCards,
+  deleteCard,
+  likeCard,
+  dislikeCard,
 };
