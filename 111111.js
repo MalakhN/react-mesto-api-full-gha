@@ -62,20 +62,20 @@ const likeCard = (req, res, next) => {
   const owner = req.user._id;
   Card.findByIdAndUpdate(
     cardId,
-    { $addToSet: { likes: owner } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: owner } },
     { new: true },
   )
     .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Передан несуществующий id карточки.');
+        throw new NotFoundError('Карточка не найдена');
       } else {
         res.send(card);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Введен некорректный id.'));
+        next(new BadRequestError('Некорректный id карточки'));
         return;
       }
       next(err);
@@ -85,7 +85,6 @@ const likeCard = (req, res, next) => {
 const dislikeCard = (req, res, next) => {
   const { cardId } = req.params;
   const owner = req.user._id;
-
   Card.findByIdAndUpdate(
     cardId,
     { $pull: { likes: owner } }, // убрать _id из массива
