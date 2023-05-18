@@ -3,7 +3,8 @@
   justify-content: space-between;
   max-width: 880px;
   width: 100%;
-  margin: 45px auto 40px;
+  margin: 0 auto 40px;
+  padding: 45px 0 0;
   border-bottom: 1px solid rgb(84, 84, 84, 0.7);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -12,6 +13,7 @@
 
 @media (max-width: 1024px) {
   .header {
-    margin: 28px auto 42px;
+    margin: 0 auto 42px;
+    padding: 28px 0 0;
   }
 }
