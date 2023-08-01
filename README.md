@@ -2,7 +2,7 @@
 **Single-page application (frontend + backend) - training project**
 
 ### Description
-The resource for saving photos of locations visited by the user with the following features:
+The resource for saving photos of locations visited by its users with the following features:
 - Registration, authorization and editing of users data
 - Adding locations in the form of a photo with:
     - description
