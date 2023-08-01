@@ -7,7 +7,7 @@ The resource for saving photos of locations visited by its users with the follow
 - Adding locations in the form of a photo with:
     - description
     - preview by click
-    - like and like counter
+    - like with likes counter
     - the ability to delete only your own locations and view the locations of other users
 
 ## Technologies
