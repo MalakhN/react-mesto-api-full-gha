@@ -12,6 +12,7 @@ The resource for saving photos of locations visited by its users with the follow
 
 ## Technologies
 - React application with adaptive layout
+- Node.js
 - Express framework
 - MongoDB
 - BEM
